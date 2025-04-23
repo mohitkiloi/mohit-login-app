@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     stage('Clone Repo') {
-    steps {
+      steps {
         git branch: 'main', url: 'https://github.com/mohitkiloi/mohit-login-app.git'
+      }
     }
-}
 
 
         stage('Setup Python Env') {
