@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Dashboard - Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>👥 Human Resources</h1>
+    <p>Welcome {{ email }} ({{ role }})</p>
+    <ul>
+        <li>📋 Review employee records</li>
+        <li>📩 Manage leave requests</li>
+        <li>🤝 Organize interviews</li>
+        <li>🧾 Update HR policies</li>
+        <li>🏆 Track employee performance</li>
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

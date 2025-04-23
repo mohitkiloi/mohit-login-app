@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('/static/images/ghibli_background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ffcc;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00ffcc;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .brand {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome to Mohit Hooda Cyber Solutions GmbH</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error-message">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="/login" method="POST">
+            <input type="email" name="email" placeholder="Enter your company email" required>
+            <input type="password" name="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="brand">© 2025 Mohit Hooda Cyber Solutions GmbH</div>
+    </div>
+</body>
+</html>

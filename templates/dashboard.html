@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ role.capitalize() }} Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #4e54c8, #8f94fb);
+      color: white;
+      padding: 50px;
+      text-align: center;
+    }
+
+    .dashboard {
+      background-color: rgba(0,0,0,0.3);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #00ffcc;
+    }
+
+    .task {
+      background: rgba(255,255,255,0.1);
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px 25px;
+      background: #00ffcc;
+      border: none;
+      border-radius: 5px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>{{ role.capitalize() }} Dashboard</h1>
+    <p>Welcome, <strong>{{ email }}</strong>!</p>
+
+    <div class="task">
+      <h3>Your Tasks</h3>
+      {% if role == 'developer' %}
+        <ul>
+          <li>Implement new feature modules</li>
+          <li>Fix bug reports assigned</li>
+          <li>Run unit and integration tests</li>
+        </ul>
+      {% elif role == 'security' %}
+        <ul>
+          <li>Review recent login activity</li>
+          <li>Update firewall and endpoint rules</li>
+          <li>Audit compliance policies</li>
+        </ul>
+      {% elif role == 'marketing' %}
+        <ul>
+          <li>Plan new email campaign</li>
+          <li>Analyze traffic and engagement</li>
+          <li>Coordinate with design team</li>
+        </ul>
+      {% elif role == 'hr' %}
+        <ul>
+          <li>Shortlist applicants</li>
+          <li>Prepare training plan</li>
+          <li>Send offer letters</li>
+        </ul>
+      {% elif role == 'finance' %}
+        <ul>
+          <li>Verify current budget</li>
+          <li>Approve payment requests</li>
+          <li>Prepare end-of-month report</li>
+        </ul>
+      {% elif role == 'admin' %}
+        <ul>
+          <li>Manage user access</li>
+          <li>Monitor CI/CD pipeline</li>
+          <li>Assign departmental roles</li>
+        </ul>
+      {% endif %}
+    </div>
+
+    <form action="/logout" method="GET">
+      <button>Logout</button>
+    </form>
+  </div>
+</body>
+</html>

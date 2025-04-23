@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unauthorized Access</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      background-color: #ffcccc;
+      color: #333;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    .unauthorized-box {
+      background-color: white;
+      display: inline-block;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="unauthorized-box">
+    <h1>🚫 Unauthorized Access</h1>
+    <p>You are not authorized to view this dashboard.</p>
+    <a href="{{ url_for('login') }}">Return to Login</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>⚙️ Admin Control Center</h1>
+    <p>Welcome {{ email }} ({{ role }})</p>
+    <ul>
+        <li>🔑 Manage users and permissions</li>
+        <li>📊 Access system-wide logs</li>
+        <li>🔍 Track login and anomaly patterns</li>
+        <li>🗂 Update organization settings</li>
+        <li>🚨 Handle incident escalations</li>
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

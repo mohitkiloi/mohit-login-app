@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Role Selection - Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='css/images/background.jpg') }}");
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .role-btn {
+            margin: 10px;
+            padding: 15px 30px;
+            border: none;
+            background-color: #1abc9c;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .role-btn:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome {{ session['email'] }}</h1>
+    <p>Select your department to proceed:</p>
+    {% for r in ['developer', 'security', 'marketing', 'hr', 'finance', 'admin'] %}
+        <button class="role-btn" onclick="checkAccess('{{ r }}', '{{ role }}')">{{ r.title() }} Dashboard</button>
+    {% endfor %}
+
+    <script>
+        function checkAccess(requested, assigned) {
+            if (requested === assigned) {
+                window.location.href = "/" + requested;
+            } else {
+                alert("❌ Unauthorized access to " + requested.charAt(0).toUpperCase() + requested.slice(1) + " dashboard!");
+    
+                // Send unauthorized attempt to Flask backend
+                fetch('/log_unauthorized', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ attempted_role: requested })
+                });
+            }
+        }
+    </script>
+    
+</body>
+</html>

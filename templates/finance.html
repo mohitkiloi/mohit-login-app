@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Finance Dashboard - Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>💰 Finance Desk</h1>
+    <p>Welcome {{ email }} ({{ role }})</p>
+    <ul>
+        <li>📈 Review monthly expenditure</li>
+        <li>💳 Approve financial transactions</li>
+        <li>🧾 Generate invoices</li>
+        <li>💼 Manage payroll</li>
+        <li>🔍 Monitor budgets</li>
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Dashboard - Mohit Hooda Cyber Solutions GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>🔐 Security Operations Center</h1>
+    <p>Welcome {{ email }} ({{ role }})</p>
+    <ul>
+        <li>📄 Review anomaly detection logs</li>
+        <li>👀 Monitor login attempts</li>
+        <li>🛡 Implement firewall rules</li>
+        <li>⚠️ Detect suspicious behavior</li>
+        <li>📝 Write incident reports</li>
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
