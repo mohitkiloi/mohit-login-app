@@ -8,16 +8,23 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Python Env') {
             steps {
-                sh 'pip install -r requirements.txt || echo "No requirements.txt found"'
+                sh 'python -m venv venv'
+                sh '. venv/Scripts/activate && pip install -r requirements.txt || pip install flask'
             }
         }
 
-        stage('Run App') {
+        stage('Run Flask App') {
             steps {
-                sh 'nohup python app.py &'
+                sh '. venv/Scripts/activate && python app.py > flask_output.log &'
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'flask_output.log', onlyIfSuccessful: true
         }
     }
 }
