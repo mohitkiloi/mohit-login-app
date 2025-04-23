@@ -1,30 +1,24 @@
 pipeline {
     agent any
 
+    stages {
         stage('Clone Repo') {
-           steps {
-             git branch: 'main', url: 'https://github.com/mohitkiloi/mohit-login-app.git'
-           }
+            steps {
+                git branch: 'main', url: 'https://github.com/mohitkiloi/mohit-login-app.git'
+            }
         }
-
 
         stage('Setup Python Env') {
             steps {
-                sh 'python -m venv venv'
-                sh '. venv/Scripts/activate && pip install -r requirements.txt || pip install flask'
+                bat 'python -m venv venv'
+                bat '.\\venv\\Scripts\\activate && pip install -r requirements.txt'
             }
         }
 
         stage('Run Flask App') {
             steps {
-                sh '. venv/Scripts/activate && python app.py > flask_output.log &'
+                bat '.\\venv\\Scripts\\activate && python app.py'
             }
-        }
-    }
-
-    post {
-        always {
-            archiveArtifacts artifacts: 'flask_output.log', onlyIfSuccessful: true
         }
     }
 }
