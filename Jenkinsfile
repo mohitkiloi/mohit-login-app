@@ -1,11 +1,15 @@
 pipeline {
     agent any
-
     environment {
         VENV_DIR = 'venv'
     }
 
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Clone Repo') {
             steps {
@@ -15,18 +19,19 @@ pipeline {
 
         stage('Setup Python Env') {
             steps {
-                bat "python -m venv %VENV_DIR%"
-                bat "%VENV_DIR%\\Scripts\\python.exe -m pip install --upgrade pip"
-                // Uncomment below if using requirements.txt
-                // bat "%VENV_DIR%\\Scripts\\python.exe -m pip install -r requirements.txt"
+                bat 'python -m venv %VENV_DIR%'
+                bat '%VENV_DIR%\\Scripts\\activate && pip install --upgrade pip'
+                bat '%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt'
             }
         }
 
         stage('Run Flask App') {
             steps {
                 bat '''
-                    echo Starting Flask App
-                    %VENV_DIR%\\Scripts\\python.exe app.py
+                    echo Running Flask app in background...
+                    start /MIN %VENV_DIR%\\Scripts\\python.exe app.py
+                    timeout /t 30
+                    echo Auto-stopping after 30 seconds.
                 '''
             }
         }
@@ -35,9 +40,6 @@ pipeline {
     post {
         always {
             echo '🧹 Cleanup done. Pipeline finished.'
-        }
-        success {
-            echo '✅ Success! App ran and finished correctly.'
         }
         failure {
             echo '❌ Something went wrong. Check the logs.'
