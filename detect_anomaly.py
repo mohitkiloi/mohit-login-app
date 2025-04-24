@@ -10,4 +10,4 @@ df["anomaly"] = model.predict(features)
 df["anomaly_label"] = df["anomaly"].apply(lambda x: "Anomaly" if x == -1 else "Normal")
 
 df.to_csv("analyzed_logs.csv", index=False)
-print("✅ Anomalies detected and saved in analyzed_logs.csv")
+print("[INFO] Anomalies detected and saved in analyzed_logs.csv")
