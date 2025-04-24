@@ -27,11 +27,11 @@ pipeline {
 
         stage('Run Flask App') {
             steps {
-                bat '''
-                    echo Running Flask app in background...
-                    start /MIN %VENV_DIR%\\Scripts\\python.exe app.py
-                    call timeout /t 30 /nobreak
-                    echo Auto-stopping after 30 seconds.
+                powershell '''
+                    Write-Host "⚙️  Starting Flask app in background..."
+                    Start-Process -FilePath "venv\\Scripts\\python.exe" -ArgumentList "app.py"
+                    Start-Sleep -Seconds 30
+                    Write-Host "⏹️  Time limit reached. Ending build..."
                 '''
             }
         }
