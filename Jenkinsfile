@@ -30,9 +30,27 @@ pipeline {
                 powershell '''
                     Write-Host "⚙️  Starting Flask app in background..."
                     Start-Process -FilePath "venv\\Scripts\\python.exe" -ArgumentList "app.py"
-                    Start-Sleep -Seconds 100
+                    Start-Sleep -Seconds 30
                     Write-Host "⏹️  Time limit reached. Ending build..."
                 '''
+            }
+        }
+
+        stage('Generate Fake Logs') {
+            steps {
+                bat "%VENV_DIR%\\Scripts\\activate && python generate_fake_logs.py"
+            }
+        }
+
+        stage('Train AI Model') {
+            steps {
+                bat "%VENV_DIR%\\Scripts\\activate && python train_model.py"
+            }
+        }
+
+        stage('Run Anomaly Detection') {
+            steps {
+                bat "%VENV_DIR%\\Scripts\\activate && python detect_anomaly.py"
             }
         }
     }
