@@ -10,4 +10,4 @@ model = IsolationForest(n_estimators=100, contamination=0.1, random_state=42)
 model.fit(features)
 
 joblib.dump(model, "model.joblib")
-print("✅ Model trained and saved to model.joblib")
+print("[INFO] Model trained and saved to model.joblib")
