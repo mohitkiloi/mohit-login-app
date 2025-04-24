@@ -19,9 +19,9 @@ pipeline {
 
         stage('Setup Python Env') {
             steps {
-                bat 'python -m venv %VENV_DIR%'
-                bat '%VENV_DIR%\\Scripts\\activate && pip install --upgrade pip'
-                bat '%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt'
+                bat "python -m venv %VENV_DIR%"
+                bat "%VENV_DIR%\\Scripts\\activate && pip install --upgrade pip"
+                bat "%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt"
             }
         }
 
@@ -30,7 +30,7 @@ pipeline {
                 bat '''
                     echo Running Flask app in background...
                     start /MIN %VENV_DIR%\\Scripts\\python.exe app.py
-                    timeout /t 30
+                    call timeout /t 30 /nobreak
                     echo Auto-stopping after 30 seconds.
                 '''
             }
