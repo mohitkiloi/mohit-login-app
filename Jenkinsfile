@@ -2,29 +2,23 @@ pipeline {
     agent any
 
     environment {
-        // Set environment variables if needed
-        APP_ENV = 'development'
+        VENV_DIR = 'venv'
     }
 
     stages {
 
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/mohitkiloi/mohit-login-app.git'
+                git branch: 'main', url: 'https://github.com/mohitkiloi/mohit-login-app.git'
             }
         }
 
         stage('Setup Python Env') {
             steps {
-                bat 'python -m venv venv'
-                bat '.\\venv\\Scripts\\activate && pip install --upgrade pip'
-                bat '.\\venv\\Scripts\\activate && pip install -r requirements.txt'
+                bat "python -m venv ${env.VENV_DIR}"
+                bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install --upgrade pip"
+                // If you have requirements.txt, uncomment below:
+                // bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install -r requirements.txt"
             }
         }
 
@@ -41,13 +35,13 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up workspace...'
+            echo '🧹 Cleanup done. Pipeline finished.'
         }
         success {
-            echo 'Pipeline completed successfully 🎉'
+            echo '✅ Success! App ran and finished correctly.'
         }
         failure {
-            echo 'Pipeline failed 💥'
+            echo '❌ Something went wrong. Check the logs.'
         }
     }
 }
