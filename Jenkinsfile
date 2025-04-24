@@ -15,16 +15,19 @@ pipeline {
 
         stage('Setup Python Env') {
             steps {
-                bat "python -m venv ${env.VENV_DIR}"
-                bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install --upgrade pip"
-                // If you have a requirements.txt file, uncomment below:
-                // bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install -r requirements.txt"
+                bat "python -m venv %VENV_DIR%"
+                bat "%VENV_DIR%\\Scripts\\python.exe -m pip install --upgrade pip"
+                // Uncomment below if using requirements.txt
+                // bat "%VENV_DIR%\\Scripts\\python.exe -m pip install -r requirements.txt"
             }
         }
 
         stage('Run Flask App') {
             steps {
-                bat ".\\${env.VENV_DIR}\\Scripts\\activate && start /MIN python app.py && timeout /t 30"
+                bat '''
+                    echo Starting Flask App
+                    %VENV_DIR%\\Scripts\\python.exe app.py
+                '''
             }
         }
     }
