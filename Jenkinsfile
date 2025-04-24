@@ -30,7 +30,7 @@ pipeline {
                 powershell '''
                     Write-Host "⚙️  Starting Flask app in background..."
                     Start-Process -FilePath "venv\\Scripts\\python.exe" -ArgumentList "app.py"
-                    Start-Sleep -Seconds 30
+                    Start-Sleep -Seconds 100
                     Write-Host "⏹️  Time limit reached. Ending build..."
                 '''
             }
