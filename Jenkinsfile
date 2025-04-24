@@ -24,11 +24,7 @@ pipeline {
 
         stage('Run Flask App') {
             steps {
-                bat '''
-                    call .\\venv\\Scripts\\activate
-                    start /MIN python app.py
-                    timeout /t 30
-                '''
+                bat ".\\${env.VENV_DIR}\\Scripts\\activate && start /MIN python app.py && timeout /t 30"
             }
         }
     }
