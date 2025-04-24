@@ -17,14 +17,18 @@ pipeline {
             steps {
                 bat "python -m venv ${env.VENV_DIR}"
                 bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install --upgrade pip"
-                // If using requirements.txt, uncomment this line:
+                // If you have a requirements.txt file, uncomment below:
                 // bat ".\\${env.VENV_DIR}\\Scripts\\activate && pip install -r requirements.txt"
             }
         }
 
         stage('Run Flask App') {
             steps {
-                bat ".\\${env.VENV_DIR}\\Scripts\\activate && start /B python app.py && timeout /t 30"
+                bat '''
+                    call .\\venv\\Scripts\\activate
+                    start /MIN python app.py
+                    timeout /t 30
+                '''
             }
         }
     }
