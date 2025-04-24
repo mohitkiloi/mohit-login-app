@@ -41,4 +41,5 @@ for _ in range(500):
 
 df = pd.DataFrame(logs)
 df.to_csv("logs.csv", index=False)
-print("✅ Fake logs written to logs.csv")
+print("[INFO] Fake logs written to logs.csv")
+
