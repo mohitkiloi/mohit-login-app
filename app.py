@@ -92,14 +92,14 @@ def login():
 
             alerts = pd.concat([alerts, pd.DataFrame([alert])], ignore_index=True)
             alerts.to_csv(ALERT_FILE, index=False)
-            flash("⚠️ Suspicious login detected!", "danger")
+            flash(" Suspicious login detected!", "danger")
 
         if status == "success":
             session["email"] = email
             session["role"] = role
             return redirect(url_for("landing"))
         else:
-            flash("❌ Login failed. Please try again.", "warning")
+            flash(" Login failed. Please try again.", "warning")
 
     return render_template("login.html")
 
@@ -113,7 +113,7 @@ def landing():
 def dashboard(role):
     if "role" in session and session["role"] == role:
         return render_template("dashboard.html", user=session["email"], dept=role)
-    flash("🚫 Unauthorized access!", "danger")
+    flash(" Unauthorized access!", "danger")
     return redirect(url_for("landing"))
 
 @app.route("/logout")
