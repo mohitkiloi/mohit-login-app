@@ -55,7 +55,7 @@ if __name__ == "__main__":
             })
 
     if suspicious_logs:
-        print("\n🛡️ Suspicious Logins Detected:")
+        print("\n Suspicious Logins Detected:")
         print(pd.DataFrame(suspicious_logs).tail())
     else:
-        print("✅ No suspicious activity found.")
+        print(" No suspicious activity found.")
