@@ -50,6 +50,6 @@ with open("experiments/metrics_report.json", "w") as f:
     json.dump(metrics, f, indent=4)
 
 # Print for Jenkins
-print("\n📊 Model Metrics:")
+print("\n Model Metrics:")
 for k, v in metrics.items():
     print(f"{k}: {v}")
