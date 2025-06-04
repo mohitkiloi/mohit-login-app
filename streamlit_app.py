@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title("🚨 Suspicious Login Alert Dashboard")
+st.title(" Suspicious Login Alert Dashboard")
 
 try:
     alerts = pd.read_csv("alert_report.csv")
