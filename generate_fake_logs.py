@@ -63,4 +63,4 @@ for _ in range(10000):
     logs.append(generate_log_row(user, attack_type))
 
 pd.DataFrame(logs).to_csv("logs.csv", index=False)
-print("[✓] Generated 10,000 fake login logs into logs.csv")
+print("Generated 10,000 fake login logs into logs.csv")
