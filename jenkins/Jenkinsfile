@@ -4,45 +4,33 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'python -m venv venv'
-                sh './venv/Scripts/pip install -r requirements.txt'
+                bat 'python -m venv venv'
+                bat 'venv\\Scripts\\pip install -r requirements.txt'
             }
         }
 
         stage('Generate Logs') {
             steps {
-                sh './venv/Scripts/python generate_fake_logs.py'
+                bat 'venv\\Scripts\\python generate_fake_logs.py'
             }
         }
 
         stage('Train Model') {
             steps {
-                sh './venv/Scripts/python train_model.py'
+                bat 'venv\\Scripts\\python train_model.py'
             }
         }
 
         stage('Detect Anomalies') {
             steps {
-                sh './venv/Scripts/python detect_anomaly.py'
+                bat 'venv\\Scripts\\python detect_anomaly.py'
             }
         }
 
         stage('Show Output') {
             steps {
-                sh 'tail -n 5 logs.csv || echo "No logs yet"'
-                sh 'tail -n 5 alert_report.csv || echo "No alerts found"'
-            }
-        }
-
-        stage('Email Alert') {
-            steps {
-                script {
-                    def content = readFile('alert_report.csv')
-                    if (content.contains("Anomaly")) {
-                        echo "🚨 Alert triggered!"
-                        sh './jenkins/email_alert.sh'
-                    }
-                }
+                bat 'type logs.csv'
+                bat 'type alert_report.csv'
             }
         }
 
