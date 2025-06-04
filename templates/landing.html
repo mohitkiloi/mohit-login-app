@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Landing | Mohit Hooda Cyber Solutions</title>
+</head>
+<body>
+    <h2>Welcome, {{ email }}</h2>
+    <p>Your Role: <strong>{{ role }}</strong></p>
+    <form action="{{ url_for('dashboard', role=role) }}">
+        <button type="submit">Go to {{ role }} Dashboard</button>
+    </form>
+    <form action="{{ url_for('logout') }}">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

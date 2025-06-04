@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ dept.capitalize() }} Dashboard</title>
+</head>
+<body>
+    <h2>{{ dept.capitalize() }} Dashboard</h2>
+    <p>Welcome, {{ user }}!</p>
+    <p>This section is under {{ dept }} management.</p>
+    <form action="{{ url_for('logout') }}">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
