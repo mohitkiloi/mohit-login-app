@@ -1,60 +1,61 @@
-stages {
-    stage('Clone Repo') {
-        steps {
-            git 'https://github.com/mohitkiloi/mohit-login-app.git'
-        }
-    }
+pipeline {
+    agent any
 
-    stage('Setup Python Env') {
-        steps {
-            bat 'python -m venv venv'
-            bat 'venv\\Scripts\\pip install --upgrade pip'
-            bat 'venv\\Scripts\\pip install -r requirements.txt'
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/mohitkiloi/mohit-login-app.git'
+            }
         }
-    }
 
-    stage('Generate Logs') {
-        steps {
-            bat 'venv\\Scripts\\python generate_fake_logs.py'
+        stage('Setup Python Env') {
+            steps {
+                bat '"C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
+                bat '.\\venv\\Scripts\\pip install --upgrade pip'
+                bat '.\\venv\\Scripts\\pip install -r requirements.txt'
+            }
         }
-    }
 
-    stage('Train Isolation Forest Model') {
-        steps {
-            bat 'venv\\Scripts\\python train_model.py'
+        stage('Generate Logs') {
+            steps {
+                bat '.\\venv\\Scripts\\python generate_fake_logs.py'
+            }
         }
-    }
 
-    stage('Detect Anomalies') {
-        steps {
-            bat 'venv\\Scripts\\python detect_anomaly.py'
+        stage('Train Isolation Forest') {
+            steps {
+                bat '.\\venv\\Scripts\\python train_model.py'
+            }
         }
-    }
 
-    stage('Train GNN Model') {
-        steps {
-            bat 'venv\\Scripts\\python gnn\\graph_builder.py'
-            bat 'venv\\Scripts\\python gnn\\gnn_model.py'
+        stage('Detect Anomalies') {
+            steps {
+                bat '.\\venv\\Scripts\\python detect_anomaly.py'
+            }
         }
-    }
 
-    stage('Infer GNN Predictions') {
-        steps {
-            bat 'venv\\Scripts\\python gnn\\infer_gnn.py'
+        stage('Build Login Graph') {
+            steps {
+                bat '.\\venv\\Scripts\\python gnn\\graph_builder.py'
+            }
         }
-    }
 
-    stage('Show Output') {
-        steps {
-            bat 'type logs.csv'
-            bat 'type alert_report.csv'
-            bat 'type experiments\\metrics_report.json'
+        stage('Train GNN Model') {
+            steps {
+                bat '.\\venv\\Scripts\\python gnn\\gnn_model.py'
+            }
         }
-    }
 
-    stage('Archive Reports') {
-        steps {
-            archiveArtifacts artifacts: 'logs.csv, alert_report.csv, experiments/metrics_report.json, gnn_model.pth'
+        stage('Infer with GNN') {
+            steps {
+                bat '.\\venv\\Scripts\\python gnn\\infer_gnn.py'
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: 'logs.csv, alert_report.csv, gnn_model.pth, login_graph.csv, experiments/metrics_report.json', onlyIfSuccessful: true
+            }
         }
     }
 }
