@@ -23,7 +23,7 @@ edge_index = torch.tensor([
 x = torch.eye(len(nodes), dtype=torch.float)
 
 # Load labels (attack types) from logs.csv
-log_data = pd.read_csv("../logs.csv")
+log_data = pd.read_csv("logs.csv")
 log_data = log_data[log_data['attack_type'] != 'normal']  # filter out normal
 log_data = log_data[log_data['email'].isin(node_id_map)]
 
