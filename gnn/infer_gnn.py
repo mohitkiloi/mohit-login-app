@@ -34,4 +34,6 @@ le = LabelEncoder()
 le.fit(log_data[log_data['attack_type'] != "normal"]['attack_type'])
 
 for i, node in enumerate(nodes):
-    print(f"{node} → {le.inverse_transform([predictions[i].item()])[0]}")
+    print(f"{node} -> {le.inverse_transform([predictions[i].item()])[0]}")
+
+
