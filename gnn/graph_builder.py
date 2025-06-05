@@ -2,7 +2,7 @@ import pandas as pd
 import networkx as nx
 
 # Load login logs
-logs = pd.read_csv("/logs.csv")
+logs = pd.read_csv("logs.csv")
 
 G = nx.Graph()
 
