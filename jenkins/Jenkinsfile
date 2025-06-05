@@ -16,42 +16,45 @@ pipeline {
             }
         }
 
-        stage('Generate Logs') {
+        stage('Generate Fake Logs') {
             steps {
                 bat '.\\venv\\Scripts\\python generate_fake_logs.py'
             }
         }
 
-        stage('Train Model') {
+        stage('Train Isolation Forest') {
             steps {
                 bat '.\\venv\\Scripts\\python train_model.py'
             }
         }
 
-        stage('Detect Anomalies') {
+        stage('Detect Anomalies (Isolation Forest)') {
             steps {
                 bat '.\\venv\\Scripts\\python detect_anomaly.py'
             }
         }
 
-        // ✅ Add this stage right here
-        stage('GNN Inference') {
+        stage('Build Graph (GNN)') {
+            steps {
+                bat '.\\venv\\Scripts\\python gnn\\graph_builder.py'
+            }
+        }
+
+        stage('Train GNN Model') {
+            steps {
+                bat '.\\venv\\Scripts\\python gnn\\gnn_model.py'
+            }
+        }
+
+        stage('Infer GNN') {
             steps {
                 bat '.\\venv\\Scripts\\python gnn\\infer_gnn.py'
             }
         }
 
-        stage('Show Output') {
-            steps {
-                bat 'type logs.csv'
-                bat 'type alert_report.csv'
-                bat 'type experiments\\metrics_report.json'
-            }
-        }
-
         stage('Archive Reports') {
             steps {
-                archiveArtifacts artifacts: 'logs.csv, alert_report.csv, experiments/metrics_report.json, gnn/login_graph.csv'
+                archiveArtifacts artifacts: 'logs.csv, alert_report.csv, experiments/metrics_report.json, login_graph.csv, gnn_model.pth', fingerprint: true
             }
         }
     }
