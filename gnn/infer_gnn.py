@@ -18,7 +18,7 @@ x = torch.eye(len(nodes), dtype=torch.float)
 data = Data(x=x, edge_index=edge_index)
 
 # Load trained model
-model = GNN(in_channels=x.shape[1], out_channels=6)  # change based on your #labels
+model = GNN(in_channels=x.shape[1], out_channels=5)  # change based on your #labels
 model.load_state_dict(torch.load("gnn_model.pth"))
 model.eval()
 
@@ -29,7 +29,7 @@ with torch.no_grad():
 
 # Decode labels
 from sklearn.preprocessing import LabelEncoder
-log_data = pd.read_csv("../logs.csv")
+log_data = pd.read_csv("logs.csv")
 le = LabelEncoder()
 le.fit(log_data[log_data['attack_type'] != "normal"]['attack_type'])
 
