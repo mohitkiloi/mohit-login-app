@@ -11,7 +11,6 @@ pipeline {
         stage('Setup Python Env') {
             steps {
                 bat '"C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
-                
                 bat '.\\venv\\Scripts\\pip install -r requirements.txt'
             }
         }
@@ -19,6 +18,18 @@ pipeline {
         stage('Generate Logs') {
             steps {
                 bat '.\\venv\\Scripts\\python generate_fake_logs.py'
+            }
+        }
+
+        stage('Policy Check with OPA') {
+            steps {
+                bat 'opa eval --data opa/pipeline_policy.rego --input opa/input.json "data.ci_cd.policy.allow" > policy_result.json'
+                script {
+                    def result = readFile('policy_result.json')
+                    if (!result.contains('true')) {
+                        error("Policy check failed. Build stopped.")
+                    }
+                }
             }
         }
 
