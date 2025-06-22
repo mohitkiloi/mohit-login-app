@@ -72,3 +72,4 @@ for epoch in range(100):
 # Save model
 torch.save(model.state_dict(), "gnn_model.pth")
 print(" Trained GNN model and saved as gnn_model.pth")
+

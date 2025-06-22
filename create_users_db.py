@@ -34,4 +34,4 @@ VALUES (?, ?, ?)
 conn.commit()
 conn.close()
 
-print("[✓] Created users.db with 30 users.")
+print("Created users.db with 30 users.")

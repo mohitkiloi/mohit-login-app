@@ -63,6 +63,7 @@ pipeline {
             }
         }
 
+
         stage('Archive Results') {
             steps {
                 archiveArtifacts artifacts: 'logs.csv, alert_report.csv, gnn_model.pth, login_graph.csv, experiments/metrics_report.json', onlyIfSuccessful: true

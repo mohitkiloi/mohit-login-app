@@ -64,3 +64,4 @@ for _ in range(10000):
 
 pd.DataFrame(logs).to_csv("logs.csv", index=False)
 print("Generated 10,000 fake login logs into logs.csv")
+
