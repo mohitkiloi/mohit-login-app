@@ -2,7 +2,7 @@ package ci_cd.policy
 
 default allow = false
 
-allow {
+allow if {
   input.branch == "main"
   input.approved == true
 }
