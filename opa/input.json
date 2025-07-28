@@ -1,4 +1,5 @@
 {
   "branch": "main",
-  "approved": true
+  "approved": true,
+  "role": "developer"
 }

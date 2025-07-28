@@ -1,6 +1,5 @@
 module ci_cd_policy
 
-// 1. Define types
 sig Branch {}
 one sig Main extends Branch {}
 
@@ -12,21 +11,24 @@ abstract sig Bool {}
 one sig True extends Bool {}
 one sig False extends Bool {}
 
-// 2. Define a commit event
 sig Commit {
   branch: Branch,
-  approval: Approval
+  approval: Approval,
+  role: Role
 }
 
-// 3. The Policy: Only allow commit if on main AND approved
+abstract sig Role {}
+one sig Admin extends Role {}
+one sig Developer extends Role {}
+one sig Intern extends Role {}
+
 pred allow(c: Commit) {
-  c.branch = Main and c.approval.approved = True
+  c.branch = Main and c.approval.approved = True and c.role = Admin
 }
 
-// 4. Check: is there any commit that violates the policy?
 assert NoPolicyViolation {
   all c: Commit |
-    allow[c] or not (c.branch = Main and c.approval.approved = True)
+    allow[c] or not (c.branch = Main and c.approval.approved = True and c.role = Admin)
 }
 
-check NoPolicyViolation for 3
+check NoPolicyViolation for 5
