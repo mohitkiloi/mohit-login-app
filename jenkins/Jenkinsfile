@@ -2,49 +2,43 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Clone Repository') {
+        stage('Clone Repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/mohitkiloi/mohit-login-app.git'
             }
         }
 
-        stage('Setup Python Environment') {
+        stage('Setup Python Env') {
             steps {
                 bat '"C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
                 bat '.\\venv\\Scripts\\pip install -r requirements.txt'
             }
         }
 
-        stage('Generate Fake Logs') {
+        stage('Generate Logs') {
             steps {
                 bat '.\\venv\\Scripts\\python generate_fake_logs.py'
             }
         }
 
-        stage('OPA Policy Checks') {
+        stage('Policy Check with OPA') {
             steps {
-                // Run both policies from opa/policies/
                 bat 'opa.exe eval --format=json --data opa/policies/ --input opa/input.json "data.pipeline_policy.allow" > pipeline_result.json'
                 bat 'opa.exe eval --format=json --data opa/policies/ --input opa/input.json "data.ci_cd_policy.allow" > cicd_result.json'
-
                 script {
                     def pipelineResult = readFile('pipeline_result.json')
                     def cicdResult = readFile('cicd_result.json')
 
-                    if (!pipelineResult.contains('"value": true')) {
-                        error("OPA Policy [pipeline_policy.rego] failed.")
+                    if (!pipelineResult.contains('"value": true') || !cicdResult.contains('"value": true')) {
+                        error("One or more OPA policy checks failed. Build stopped.")
+                    } else {
+                        echo "Both OPA policies passed. Proceeding..."
                     }
-                    if (!cicdResult.contains('"value": true')) {
-                        error("OPA Policy [ci_cd_policy.rego] failed.")
-                    }
-
-                    echo "Both OPA policies passed successfully."
                 }
             }
         }
 
-        stage('Train Isolation Forest Model') {
+        stage('Train Isolation Forest') {
             steps {
                 bat '.\\venv\\Scripts\\python train_model.py'
             }
@@ -56,7 +50,7 @@ pipeline {
             }
         }
 
-        stage('Build GNN Graph') {
+        stage('Build Login Graph') {
             steps {
                 bat '.\\venv\\Scripts\\python gnn\\graph_builder.py'
             }
@@ -68,13 +62,13 @@ pipeline {
             }
         }
 
-        stage('GNN Inference') {
+        stage('Infer with GNN') {
             steps {
                 bat '.\\venv\\Scripts\\python gnn\\infer_gnn.py'
             }
         }
 
-        stage('Archive Final Results') {
+        stage('Archive Results') {
             steps {
                 archiveArtifacts artifacts: 'logs.csv, alert_report.csv, gnn_model.pth, login_graph.csv, experiments/metrics_report.json', onlyIfSuccessful: true
             }
