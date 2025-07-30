@@ -1,5 +1,7 @@
 {
-  "branch": "main",
-  "approved": true,
-  "role": "admin"
+  "input": {
+    "branch": "main",
+    "approved": true,
+    "role": "admin"
+  }
 }
