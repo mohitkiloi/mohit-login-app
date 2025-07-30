@@ -23,7 +23,7 @@ pipeline {
 
         stage('Policy Check with OPA') {
             steps {
-                bat 'opa.exe eval --data opa/pipeline_policy.rego --input opa/input.json "data.ci_cd.policy.allow" > policy_result.json'
+                bat 'opa.exe eval --data opa/ --input opa/input.json "data.ci_cd.policy.allow" > policy_result.json'
                 script {
                     def result = readFile('policy_result.json')
                     if (!result.contains('true')) {
