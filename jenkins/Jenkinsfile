@@ -23,16 +23,19 @@ pipeline {
 
         stage('Policy Check with OPA') {
             steps {
-                bat 'opa.exe eval --format=json --data opa/policies/ --input opa/input.json "data.pipeline_policy.allow" > pipeline_result.json'
+                // Run both policies
+                bat 'opa.exe eval --format=json --data opa/policies/ --input opa/input.json "data.pipeline.allow" > pipeline_result.json'
                 bat 'opa.exe eval --format=json --data opa/policies/ --input opa/input.json "data.ci_cd_policy.allow" > cicd_result.json'
+
+                // Parse results
                 script {
                     def pipelineResult = readFile('pipeline_result.json')
                     def cicdResult = readFile('cicd_result.json')
 
                     if (!pipelineResult.contains('"value": true') || !cicdResult.contains('"value": true')) {
-                        error("One or more OPA policy checks failed. Build stopped.")
+                        error(" One or more OPA policy checks failed. Build stopped.")
                     } else {
-                        echo "Both OPA policies passed. Proceeding..."
+                        echo " Both OPA policies passed."
                     }
                 }
             }
