@@ -21,17 +21,23 @@ pipeline {
             }
         }
 
-        stage('Policy Check with OPA') {
+       stage('Policy Check with OPA') {
             steps {
-                bat 'opa.exe eval --data opa/ --input opa/input.json "data.ci_cd.policy.allow" > policy_result.json'
+                bat 'opa.exe eval --data opa/ --input opa/input.json "data.pipeline.allow" > pipeline_result.json'
+                bat 'opa.exe eval --data opa/ --input opa/input.json "data.ci_cd.policy.allow" > cicd_result.json'
                 script {
-                    def result = readFile('policy_result.json')
-                    if (!result.contains('true')) {
-                        error("Policy check failed. Build stopped.")
+                    def result1 = readFile('pipeline_result.json')
+                    def result2 = readFile('cicd_result.json')
+
+                    if (!result1.contains('true') || !result2.contains('true')) {
+                      error(" One or more policy checks failed.")
+                    } else {
+                        echo "Both OPA policies passed."
                     }
                 }
             }
         }
+
 
         stage('Train Isolation Forest') {
             steps {
