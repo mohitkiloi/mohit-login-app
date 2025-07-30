@@ -11,44 +11,26 @@ pipeline {
         stage('Setup Python Env') {
             steps {
                 bat '"C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Python\\Python312\\python.exe" -m venv venv'
-                bat '.\\venv\\Scripts\\pip.exe install -r requirements.txt'
-            }
-        }
-
-        // Optional: If you want Jenkins to auto-generate input.json
-        stage('Generate input.json') {
-            steps {
-                writeFile file: 'opa/input.json', text: '''{
-  "input": {
-    "branch": "main",
-    "approved": true,
-    "role": "admin"
-  }
-}'''
+                bat '.\\venv\\Scripts\\pip install -r requirements.txt'
             }
         }
 
         stage('Generate Logs') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe generate_fake_logs.py'
+                bat '.\\venv\\Scripts\\python generate_fake_logs.py'
             }
         }
 
         stage('Policy Check with OPA') {
             steps {
-                bat 'opa.exe eval --data opa/ --input opa/input.json "data.pipeline.allow" > pipeline_result.json'
-                bat 'opa.exe eval --data opa/ --input opa/input.json "data.ci_cd.policy.allow" > cicd_result.json'
+                bat 'opa.exe eval --format=json --data opa/ --input opa/input.json "data.pipeline.allow" > pipeline_result.json'
+                bat 'opa.exe eval --format=json --data opa/ --input opa/input.json "data.ci_cd.policy.allow" > cicd_result.json'
                 script {
-                    def result1 = readFile('pipeline_result.json')
-                    def result2 = readFile('cicd_result.json')
+                    def pipelineResult = readFile('pipeline_result.json')
+                    def cicdResult = readFile('cicd_result.json')
 
-                    echo "=== PIPELINE POLICY RESULT ==="
-                    echo result1
-                    echo "=== CI/CD POLICY RESULT ==="
-                    echo result2
-
-                    if (!result1.contains('true') || !result2.contains('true')) {
-                        error("One or more OPA policy checks failed.")
+                    if (!pipelineResult.contains('"value": true') || !cicdResult.contains('"value": true')) {
+                        error("One or more OPA policy checks failed. Build stopped.")
                     } else {
                         echo "Both OPA policies passed."
                     }
@@ -58,31 +40,31 @@ pipeline {
 
         stage('Train Isolation Forest') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe train_model.py'
+                bat '.\\venv\\Scripts\\python train_model.py'
             }
         }
 
         stage('Detect Anomalies') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe detect_anomaly.py'
+                bat '.\\venv\\Scripts\\python detect_anomaly.py'
             }
         }
 
         stage('Build Login Graph') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe gnn\\graph_builder.py'
+                bat '.\\venv\\Scripts\\python gnn\\graph_builder.py'
             }
         }
 
         stage('Train GNN Model') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe gnn\\gnn_model.py'
+                bat '.\\venv\\Scripts\\python gnn\\gnn_model.py'
             }
         }
 
         stage('Infer with GNN') {
             steps {
-                bat '.\\venv\\Scripts\\python.exe gnn\\infer_gnn.py'
+                bat '.\\venv\\Scripts\\python gnn\\infer_gnn.py'
             }
         }
 
